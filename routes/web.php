@@ -18,6 +18,8 @@ Route::get('/get-more-tracks', [TrackingController::class, 'getMoreTracks'])->na
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], function () {
  
     Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/dashboard', [HomeController::class, 'userDashboard'])->name('dashboard');
+
 
     // Permissions
     Route::resource('permissions', PermissionController::class, ['except' => ['store', 'update', 'destroy']]);

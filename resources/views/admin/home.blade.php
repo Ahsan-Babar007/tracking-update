@@ -7,81 +7,12 @@
         <div class="card-header">
             <div class="card-row">
                 <h6 class="card-title">
-                    Tracking Dashboard
+                    Tracking Admin Dashboard
                 </h6>
             </div>
         </div>
 
-        <div class="card-body">
-            <!-- Form for API request -->
-            <form id="trackingForm">
-                @csrf
-                <div class="row">
-                    <!-- Order Date -->
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="orderDate">Order Date</label>
-                            <input type="date" id="orderDate" name="orderDate" class="form-control" required>
-                        </div>
-                    </div>
-
-                    <!-- Order Time -->
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="orderTime">Order Time</label>
-                            <input type="time" id="orderTime" name="orderTime" class="form-control" required>
-                        </div>
-                    </div>
-
-                    <!-- Delivery Date -->
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="deliveryDate">Delivery Date</label>
-                            <input type="date" id="deliveryDate" name="deliveryDate" class="form-control" required>
-                        </div>
-                    </div>
-
-                    <!-- Recipient ZIP -->
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="recipientZip">Recipient ZIP</label>
-                            <input type="text" id="recipientZip" name="recipientZip" class="form-control" placeholder="Enter Recipient ZIP" required>
-                        </div>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-
-            <!-- Loading spinner (hidden initially) -->
-            <div id="loadingSpinner" style="display: none;">
-                <img src="path/to/loading.gif" alt="Loading...">
-            </div>
-
-            <!-- Show API Response -->
-            <div id="resultBox" class="mt-4" style="display: none;">
-                <h3>Tracking Results</h3>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Shipped Date</th>
-                            <th>Delivery Date</th>
-                            <th>Recipient ZIP</th>
-                            <th>Service ID</th>
-                        </tr>
-                    </thead>
-                    <tbody id="trackingResults">
-                        <!-- Results will be inserted here dynamically -->
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Show error message if no data is found -->
-            <div id="errorBox" class="alert alert-danger mt-4" style="display: none;">
-                No tracking data found.
-            </div>
-
-        </div>
+            Admin Dashboard COunt will come here
     </div>
 </div>
 

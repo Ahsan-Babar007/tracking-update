@@ -63,9 +63,9 @@ class User extends Authenticatable implements HasLocalePreference
 
     protected static function booted()
     {
-        static::created(function ($user) {
-            $user->subscribeTo(Plan::where('name', 'Trial')->first());
-        });
+        // static::created(function ($user) {
+        //     $user->subscribeTo(Plan::where('name', 'Trial')->first());
+        // });
     }
 
     public function getIsAdminAttribute()

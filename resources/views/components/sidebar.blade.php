@@ -34,13 +34,22 @@
             <!-- Heading -->
 
             <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+                @can('admin_dashboard_access')
                 <li class="items-center">
                     <a href="{{ route("admin.home") }}" class="{{ request()->is("admin") ? "sidebar-nav-active" : "sidebar-nav" }}">
                         <i class="fas fa-tv"></i>
                         {{ trans('global.dashboard') }}
                     </a>
                 </li>
-
+                @endcan
+                @can('user_dashboard_access')
+                <li class="items-center">
+                    <a href="{{ route("admin.dashboard") }}" class="{{ request()->is("admin/dashboard") ? "sidebar-nav-active" : "sidebar-nav" }}">
+                        <i class="fas fa-tv"></i>
+                        {{ trans('global.userDashboard') }}
+                    </a>
+                </li>
+                @endcan
                 @can('user_management_access')
                     <li class="items-center">
                         <a class="has-sub {{ request()->is("admin/permissions*")||request()->is("admin/roles*")||request()->is("admin/users*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="#" onclick="window.openSubNav(this)">
