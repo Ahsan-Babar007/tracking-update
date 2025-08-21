@@ -194,7 +194,7 @@ return [
         // ...
     ])->toArray(),
 
-    'tracking_api_password' => env('TRACKING_API_PASSWORD', 'MySecretPassword123'),
+    'tracking_api_password' => env('TRACKING_API_PASSWORD'),
 
 
 

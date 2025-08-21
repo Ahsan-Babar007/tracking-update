@@ -12,7 +12,7 @@ class CheckApiPassword
     {
         $apiPassword = $request->header('X-API-PASSWORD'); // your header key
 
-        if (!$apiPassword || $apiPassword !== 'MySecretPassword123') {
+        if (!$apiPassword || $apiPassword !== env('TRACKING_API_PASSWORD')) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
