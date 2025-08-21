@@ -7,44 +7,50 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\TaskController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\UserProfileController;
-use App\Http\Controllers\TrackingController;
+use App\Http\Controllers\TrackingController1;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/login');
+// Route::redirect('/', '/login');
 
-Auth::routes(['register' => true]);
-Route::get('/get-more-tracks', [TrackingController::class, 'getMoreTracks'])->name('getmoretrack');
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], function () {
+// Auth::routes(['register' => true]);
+// Route::get('/get-more-tracks', [TrackingController::class, 'getMoreTracks'])->name('getmoretrack');
+// Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], function () {
  
-    Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/dashboard', [HomeController::class, 'userDashboard'])->name('dashboard');
+//     Route::get('/', [HomeController::class, 'index'])->name('home');
+//     Route::get('/dashboard', [HomeController::class, 'userDashboard'])->name('dashboard');
 
 
-    // Permissions
-    Route::resource('permissions', PermissionController::class, ['except' => ['store', 'update', 'destroy']]);
+//     // Permissions
+//     Route::resource('permissions', PermissionController::class, ['except' => ['store', 'update', 'destroy']]);
 
-    // Roles
-    Route::resource('roles', RoleController::class, ['except' => ['store', 'update', 'destroy']]);
+//     // Roles
+//     Route::resource('roles', RoleController::class, ['except' => ['store', 'update', 'destroy']]);
 
-    // Users
-    Route::resource('users', UserController::class, ['except' => ['store', 'update', 'destroy']]);
+//     // Users
+//     Route::resource('users', UserController::class, ['except' => ['store', 'update', 'destroy']]);
 
-    // Task
-    Route::resource('tasks', TaskController::class, ['except' => ['store', 'update', 'destroy']]);
+//     // Task
+//     Route::resource('tasks', TaskController::class, ['except' => ['store', 'update', 'destroy']]);
 
-    Route::resource('plan', PlanController::class, ['except' => ['create', 'show', 'store']]);
-
-
+//     Route::resource('plan', PlanController::class, ['except' => ['create', 'show', 'store']]);
 
 
-});
 
-Route::group(['prefix' => 'profile', 'as' => 'profile.', 'middleware' => ['auth']], function () {
-    if (file_exists(app_path('Http/Controllers/Auth/UserProfileController.php'))) {
-        Route::get('/', [UserProfileController::class, 'show'])->name('show');
-    }
+
+// });
+
+// Route::group(['prefix' => 'profile', 'as' => 'profile.', 'middleware' => ['auth']], function () {
+//     if (file_exists(app_path('Http/Controllers/Auth/UserProfileController.php'))) {
+//         Route::get('/', [UserProfileController::class, 'show'])->name('show');
+//     }
     
 
 
-});
+// });
+
+Route::view('/', 'search');
+Route::view('/contact', 'contact');
+Route::view('/about_us', 'about_us');
+Route::view('/create', 'create');
+Route::view('/tracking', 'details');
