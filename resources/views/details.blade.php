@@ -201,7 +201,7 @@
 
 <script>
 const urlParams = new URLSearchParams(window.location.search);
-const trackingId = urlParams.get('tracking_id');
+const trackingId = (urlParams.get('tracking_id') || '').replace(/\s+/g, '').trim();
 
 const deliveryBox = document.querySelector('.delivery-box');
 const deliveryLabel = document.querySelector('.delivery-label');
