@@ -120,10 +120,21 @@
         Enter your tracking number below to see the latest status of your shipment instantly.
     </p>
 
-    <form class="tracking-form" action="/tracking" method="get" style="display: flex; flex-direction: row; width: 100%; max-width: 500px; gap: 0.5rem;">
-        <input type="text" id="tracking_id" name="tracking_id" placeholder="Enter your tracking number" required>
-        <button type="submit">Track Package</button>
-    </form>
+<form class="tracking-form" onsubmit="return cleanTracking(event)" style="display: flex; flex-direction: row; width: 100%; max-width: 500px; gap: 0.5rem;">
+  <input type="text" id="tracking_id" name="tracking_id" placeholder="Enter your tracking number" required>
+  <button type="submit">Track Package</button>
+</form>
+
+<script>
+function cleanTracking(e) {
+  e.preventDefault();
+  let trackingInput = document.getElementById("tracking_id").value;
+  trackingInput = trackingInput.trim().replace(/\s+/g, ''); // remove before/after + inside spaces
+  if (trackingInput) {
+    window.location.href = "/tracking?tracking_id=" + encodeURIComponent(trackingInput);
+  }
+}
+</script>
 </main>
 
 @include('partials.footer')
