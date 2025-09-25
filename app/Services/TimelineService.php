@@ -14,7 +14,7 @@ class TimelineService
         $route = RouteFinder::find($t->origin_state, $t->destination_state, $t->country_type);
 
         $days = max(1, $t->start_date->diffInDays($t->expected_delivery_date));
-        $hubs = $t->country_type === 1 ? config('hubs_us') : config('hubs_ca');
+        $hubs = $this->getHubs($t->country_type);
 
         // Day 0: Picked up
         $pickupLocation = $hubs[$t->origin_state] ?? $t->origin_state;
@@ -29,14 +29,14 @@ class TimelineService
         ]);
 
         // Mid hops (optimized with arrive/depart for realism)
-        $midStates = array_slice($route, 1, -1); // exclude origin, destination
+        $midStates = array_slice($route, 1, -1);
         $slots = max(0, $days - 2);
         foreach ($midStates as $i => $state) {
             $dayOffset = floor(($i + 1) / count($midStates) * $slots);
             $date = $t->start_date->copy()->addDays(1 + $dayOffset);
 
             // Arrived at facility (morning)
-            $city= $hubs[$state] ?? $state;
+            $city = $hubs[$state] ?? $state;
             TrackingEvent::create([
                 'tracking_id' => $t->id,
                 'event_date' => $date->copy()->setTime(10, 0),
@@ -47,7 +47,7 @@ class TimelineService
             ]);
 
             // In transit / departed (afternoon)
-             $city= $hubs[$state] ?? $state;
+            $city = $hubs[$state] ?? $state;
             TrackingEvent::create([
                 'tracking_id' => $t->id,
                 'event_date' => $date->copy()->setTime(14, 0),
@@ -60,7 +60,6 @@ class TimelineService
 
         // Out for delivery (morning of last day)
         $city = $hubs[$t->destination_state] ?? $t->destination_city ?? 'Destination';
-
         TrackingEvent::create([
             'tracking_id'   => $t->id,
             'event_date'    => $t->expected_delivery_date->copy()->setTime(8, 0),
@@ -82,6 +81,11 @@ class TimelineService
         ]);
 
         $t->update(['status' => 'in_transit']);
+    }
+
+    private function getHubs(int $countryType): array
+    {
+        return $countryType === 1 ? config('hubs_us') : ($countryType === 2 ? config('hubs_ca') : config('hubs_mx'));
     }
 
     public function applyDelay(Tracking $t, Carbon $delayedUntil): void

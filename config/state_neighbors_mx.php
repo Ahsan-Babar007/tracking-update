@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'BC' => ['CA', 'SON'], // Baja California's neighbors (California, Sonora)
+    'SON' => ['BC', 'CHH'], // Sonora's neighbors (Baja California, Chihuahua)
+    'CHH' => ['SON', 'SLP', 'DUR'], // Chihuahua's neighbors (Sonora, San Luis Potosi, Durango)
+    'SLP' => ['CHH', 'DUR', 'GTO', 'NLE'], // San Luis Potosi's neighbors (Chihuahua, Durango, Guanajuato, Nuevo Leon)
+    'DUR' => ['SLP', 'CHH', 'JAL'], // Durango's neighbors (San Luis Potosi, Chihuahua, Jalisco)
+    'JAL' => ['DUR', 'NLE', 'GTO', 'MEX'], // Jalisco's neighbors (Durango, Nuevo Leon, Guanajuato, Mexico)
+    'NLE' => ['JAL', 'SLP', 'TAM', 'COA'], // Nuevo Leon's neighbors (Jalisco, San Luis Potosi, Tamaulipas, Coahuila)
+    'TAM' => ['NLE', 'COA', 'PUE'], // Tamaulipas' neighbors (Nuevo Leon, Coahuila, Puebla)
+    'COA' => ['TAM', 'NLE', 'PUE'], // Coahuila's neighbors (Tamaulipas, Nuevo Leon, Puebla)
+    'PUE' => ['COA', 'TAM', 'VER'], // Puebla's neighbors (Coahuila, Tamaulipas, Veracruz)
+    'VER' => ['PUE', 'CDMX', 'GTO', 'JAL'], // Veracruz' neighbors (Puebla, Mexico City, Guanajuato, Jalisco)
+    'CDMX' => ['MEX', 'GTO', 'MOR', 'TLX'], // Mexico City's neighbors (Mexico, Guanajuato, Morelos, Tlaxcala)
+    'MEX' => ['CDMX', 'PUE', 'HGO', 'GTO'], // Mexico State's neighbors (Mexico City, Puebla, Hidalgo, Guanajuato)
+    'GTO' => ['MEX', 'CDMX', 'SLP', 'VER', 'JAL'], // Guanajuato's neighbors (Mexico, Mexico City, San Luis Potosi, Veracruz, Jalisco)
+    'HGO' => ['MEX', 'PUE', 'TLX'], // Hidalgo's neighbors (Mexico, Puebla, Tlaxcala)
+    'TLX' => ['CDMX', 'MEX', 'HGO', 'VER'], // Tlaxcala's neighbors (Mexico City, Mexico, Hidalgo, Veracruz)
+    'OAX' => ['PUE', 'VER', 'CHP', 'GUA'], // Oaxaca's neighbors (Puebla, Veracruz, Chiapas, Guerrero)
+    'VER' => ['OAX', 'PUE', 'GUA', 'CDMX', 'CHP'], // Veracruz' neighbors (Oaxaca, Puebla, Guerrero, Mexico City, Chiapas)
+    'GUA' => ['OAX', 'CHP', 'PUE'], // Guerrero's neighbors (Oaxaca, Chiapas, Puebla)
+    'CHP' => ['GUA', 'OAX', 'VER'], // Chiapas' neighbors (Guerrero, Oaxaca, Veracruz)
+    'CAM' => ['BC', 'VER', 'YUC'], // Campeche's neighbors (Baja California, Veracruz, Yucatán)
+    'YUC' => ['CAM', 'VER'], // Yucatán's neighbors (Campeche, Veracruz)
+];

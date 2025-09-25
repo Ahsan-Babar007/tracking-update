@@ -15,18 +15,18 @@ class TrackingController1 extends Controller
     {
         $data = $request->validate([
             'carrier' => 'required|string|in:UPS,USPS,Canada Post',
-            'country_type' => 'required|integer|in:1,2',
+            'country_type' => 'required|integer|in:1,2,3',  // Now includes Mexico as country 3
             'origin_state' => [
                 'required',
                 'string',
                 'size:2',
-                Rule::in(array_keys(config('state_neighbors_us'))),
+                Rule::in(array_keys($this->getStateNeighbors($request->country_type))),
             ],
             'destination_state' => [
                 'required',
                 'string',
                 'size:2',
-                Rule::in(array_keys(config('state_neighbors_us'))),
+                Rule::in(array_keys($this->getStateNeighbors($request->country_type))),
             ],
             'start_date' => 'required|date',
             'expected_delivery_date' => 'required|date|after_or_equal:start_date',
@@ -51,6 +51,17 @@ class TrackingController1 extends Controller
         ], 201);
     }
 
+    private function getStateNeighbors(int $countryType)
+    {
+        if ($countryType == 1) {
+            return config('state_neighbors_us');
+        } elseif ($countryType == 2) {
+            return config('state_neighbors_ca');
+        } else {
+            return config('state_neighbors_mx');
+        }
+    }
+
     public function show(string $trackingNumber)
     {
         $now = Carbon::now('America/New_York');
@@ -58,7 +69,7 @@ class TrackingController1 extends Controller
         
         // Eager load only necessary columns from events, ordered by date
         $tracking = Tracking::with(['events' => function ($query) use ($now) {
-            $query->where('event_date', '<=', $now)
+            $query
                 ->orderBy('event_date', 'asc')
                 ->select('id', 'tracking_id', 'event_date', 'status', 'message', 'location_city', 'location_state');
         }])
@@ -151,17 +162,17 @@ class TrackingController1 extends Controller
         ]);
     }
 
-private function generateTrackingNumber(): string
-{
-    $prefix = 'CPS';
-    $date = now()->format('ymd');
+    private function generateTrackingNumber(): string
+    {
+        $prefix = 'CPS';
+        $date = now()->format('ymd');
 
-    do {
-        $rand = strtoupper(Str::random(8)); // longer random for more uniqueness
-        $number = $prefix . $date . $rand;
-        $exists = Tracking::where('tracking_number', $number)->exists();
-    } while ($exists);
+        do {
+            $rand = strtoupper(Str::random(8)); // longer random for more uniqueness
+            $number = $prefix . $date . $rand;
+            $exists = Tracking::where('tracking_number', $number)->exists();
+        } while ($exists);
 
-    return $number;
-}
+        return $number;
+    }
 }
