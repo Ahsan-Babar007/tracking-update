@@ -236,7 +236,6 @@ async function fetchTrackingData() {
 
     const liFirst = document.createElement('li');
     liFirst.innerHTML = `<div class="event-status" style="color:#2563eb">Label Created</div>
-                         <div class="event-location">${data.origin?.city || ''}, ${data.origin?.state || ''}</div>
                          <div class="event-date">Pending shipment</div>`;
     fragment.appendChild(liFirst);
 
