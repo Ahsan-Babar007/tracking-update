@@ -69,7 +69,7 @@ class TrackingController1 extends Controller
         
         // Eager load only necessary columns from events, ordered by date
         $tracking = Tracking::with(['events' => function ($query) use ($now) {
-            $query
+            $query->where('event_date', '<=', $now)
                 ->orderBy('event_date', 'asc')
                 ->select('id', 'tracking_id', 'event_date', 'status', 'message', 'location_city', 'location_state');
         }])
