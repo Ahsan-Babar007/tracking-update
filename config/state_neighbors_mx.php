@@ -33,4 +33,6 @@ return [
     'YUC' => ['CAM', 'QR'], // Yucatán
     'ZAC' => ['DUR', 'COA', 'NLE', 'SLP', 'GTO', 'JAL', 'AGU'], // Zacatecas
     'CDMX' => ['MEX', 'MOR', 'PUE', 'TLX'], // Mexico City
+    'CMX' => ['MEX', 'MOR', 'PUE', 'TLX'], // Alias for Ciudad de México
+
 ];
