@@ -19,7 +19,6 @@ public function create(Request $request, TimelineService $timeline)
         1 => config('state_neighbors_us'),
         2 => config('state_neighbors_ca'),
         3 => config('state_neighbors_mx'),
-        default => [],
     };
 
     $data = $request->validate([
