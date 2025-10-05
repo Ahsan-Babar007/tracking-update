@@ -16,6 +16,7 @@ return [
     'JAL' => 'Guadalajara',
     'MEX' => 'Toluca',
     'MIC' => 'Morelia',
+    'CMX' => 'Ciudad de México',
     'MOR' => 'Cuernavaca',
     'NAY' => 'Tepic',
     'NLE' => 'Monterrey',
