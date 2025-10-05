@@ -28,13 +28,11 @@ public function create(Request $request, TimelineService $timeline)
         'origin_state' => [
             'required',
             'string',
-            'size:2',
             Rule::in(array_keys($stateConfig)),
         ],
         'destination_state' => [
             'required',
             'string',
-            'size:2',
             Rule::in(array_keys($stateConfig)),
         ],
         'start_date' => 'required|date',
@@ -62,7 +60,7 @@ public function create(Request $request, TimelineService $timeline)
 
     public function show(string $trackingNumber)
     {
-        $now = Carbon::now('America/New_York')->addDays(7);
+        $now = Carbon::now('America/New_York');
         // $tracking = Tracking::with('events')->where('tracking_number', $trackingNumber)->firstOrFail();
         
         // Eager load only necessary columns from events, ordered by date

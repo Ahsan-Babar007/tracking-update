@@ -40,6 +40,11 @@
       margin-bottom: 10px;
       font-size: 1rem;
     }
+    input:focus, select:focus {
+      border-color: #2563eb;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
+    }
     button {
       width: 100%;
       background: #2563eb;
@@ -59,6 +64,10 @@
       color: #b91c1c;
       margin-top: 10px;
     }
+    .success {
+      color: #059669;
+      margin-top: 10px;
+    }
     .required::after {
       content: " *";
       color: #dc2626;
@@ -73,6 +82,7 @@
     <select id="carrier" name="carrier" required>
       <option value="UPS">UPS</option>
       <option value="USPS">USPS</option>
+      <option value="MEXICO">MEXICO</option>
       <option value="Canada Post">Canada Post</option>
     </select>
 
@@ -80,13 +90,26 @@
     <select id="country_type" name="country_type" required>
       <option value="1">USA</option>
       <option value="2">Canada</option>
+      <option value="3">Mexico</option>
     </select>
 
     <label for="origin_state" class="required">Origin State/Province</label>
-    <input type="text" id="origin_state" name="origin_state" required maxlength="2" placeholder="e.g., TX or ON">
+    <input type="text" id="origin_state" name="origin_state" required placeholder="e.g., TX or ON" maxlength="3">
+
+    <label for="origin_city">Origin City</label>
+    <input type="text" id="origin_city" name="origin_city" placeholder="e.g., Dallas">
+
+    <label for="origin_zip">Origin ZIP/Postal Code</label>
+    <input type="text" id="origin_zip" name="origin_zip" placeholder="e.g., 75201">
 
     <label for="destination_state" class="required">Destination State/Province</label>
-    <input type="text" id="destination_state" name="destination_state" required maxlength="2" placeholder="e.g., OH or QC">
+    <input type="text" id="destination_state" name="destination_state" required placeholder="e.g., OH or QC" maxlength="3">
+
+    <label for="destination_city">Destination City</label>
+    <input type="text" id="destination_city" name="destination_city" placeholder="e.g., Columbus">
+
+    <label for="destination_zip">Destination ZIP/Postal Code</label>
+    <input type="text" id="destination_zip" name="destination_zip" placeholder="e.g., 43215">
 
     <label for="start_date" class="required">Start Date</label>
     <input type="date" id="start_date" name="start_date" required>
@@ -96,13 +119,17 @@
 
     <button type="submit">Create Tracking</button>
     <p id="error" class="error"></p>
+    <p id="success" class="success"></p>
   </form>
 
   <script>
     document.getElementById('createTrackingForm').addEventListener('submit', async (e) => {
       e.preventDefault();
+
       const errorEl = document.getElementById('error');
+      const successEl = document.getElementById('success');
       errorEl.textContent = '';
+      successEl.textContent = '';
 
       const formData = new FormData(e.target);
       const data = Object.fromEntries(formData);
@@ -110,7 +137,10 @@
       try {
         const response = await fetch('/api/trackings', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
           body: JSON.stringify(data)
         });
 
@@ -120,8 +150,10 @@
           throw new Error(result.message || 'Failed to create tracking');
         }
 
-        alert('✅ Tracking created successfully!');
-        window.location.href = `/tracking?tracking_id=${result.tracking_number}`;
+        successEl.textContent = '✅ Tracking created successfully! Redirecting...';
+        setTimeout(() => {
+          window.location.href = `/tracking?tracking_id=${result.tracking_number}`;
+        }, 1500);
       } catch (error) {
         errorEl.textContent = error.message;
       }
