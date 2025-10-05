@@ -132,7 +132,7 @@
   .timeline li::before {
     content: "";
     position: absolute;
-    left: -9px;
+    left: -8.5px;
     top: 6px;
     width: 12px;
     height: 12px;

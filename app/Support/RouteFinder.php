@@ -6,9 +6,13 @@ class RouteFinder
 {
     public static function find(string $origin, string $destination, int $countryType): array
     {
-        $map = $countryType === 1
-            ? config('state_neighbors_us')
-            : config('state_neighbors_ca');
+        
+        $map = match ($countryType) {
+            1 => config('state_neighbors_us'),
+            2 => config('state_neighbors_ca'),
+            3 => config('state_neighbors_mx'),
+            default => [],
+        };
 
         if (!isset($map[$origin]) || !isset($map[$destination])) {
             return [$origin, $destination]; // fallback

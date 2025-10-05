@@ -11,60 +11,58 @@ use Carbon\Carbon;
 
 class TrackingController1 extends Controller
 {
-    public function create(Request $request, TimelineService $timeline)
-    {
-        $data = $request->validate([
-            'carrier' => 'required|string|in:UPS,USPS,Canada Post',
-            'country_type' => 'required|integer|in:1,2,3',  // Now includes Mexico as country 3
-            'origin_state' => [
-                'required',
-                'string',
-                'size:2',
-                Rule::in(array_keys($this->getStateNeighbors($request->country_type))),
-            ],
-            'destination_state' => [
-                'required',
-                'string',
-                'size:2',
-                Rule::in(array_keys($this->getStateNeighbors($request->country_type))),
-            ],
-            'start_date' => 'required|date',
-            'expected_delivery_date' => 'required|date|after_or_equal:start_date',
-            'origin_city' => 'nullable|string',
-            'destination_city' => 'nullable|string',
-            'origin_zip' => 'nullable|string',
-            'destination_zip' => 'nullable|string',
-        ]);
+public function create(Request $request, TimelineService $timeline)
+{
+    $countryType = $request->input('country_type');
 
-        $trackingNumber = $this->generateTrackingNumber($data);
+    $stateConfig = match ((int) $countryType) {
+        1 => config('state_neighbors_us'),
+        2 => config('state_neighbors_ca'),
+        3 => config('state_neighbors_mx'),
+        default => [],
+    };
 
-        $tracking = Tracking::create(array_merge($data, [
-            'tracking_number' => $trackingNumber,
-            'status' => 'created',
-        ]));
+    $data = $request->validate([
+        'carrier' => 'required|string|in:UPS,USPS,Canada Post,MEXICO',
+        'country_type' => 'required|integer|in:1,2,3',
+        'origin_state' => [
+            'required',
+            'string',
+            'size:2',
+            Rule::in(array_keys($stateConfig)),
+        ],
+        'destination_state' => [
+            'required',
+            'string',
+            'size:2',
+            Rule::in(array_keys($stateConfig)),
+        ],
+        'start_date' => 'required|date',
+        'expected_delivery_date' => 'required|date|after_or_equal:start_date',
+        'destination_city' => 'nullable|string',
+        'origin_zip' => 'nullable|string',
+        'destination_zip' => 'nullable|string',
+    ]);
 
-        $timeline->generateFor($tracking);
+    $trackingNumber = $this->generateTrackingNumber();
 
-        return response()->json([
-            'tracking_number' => $trackingNumber,
-            'message' => 'Tracking created successfully'
-        ], 201);
-    }
+    $tracking = Tracking::create(array_merge($data, [
+        'tracking_number' => $trackingNumber,
+        'status' => 'created',
+    ]));
 
-    private function getStateNeighbors(int $countryType)
-    {
-        if ($countryType == 1) {
-            return config('state_neighbors_us');
-        } elseif ($countryType == 2) {
-            return config('state_neighbors_ca');
-        } else {
-            return config('state_neighbors_mx');
-        }
-    }
+    $timeline->generateFor($tracking);
+
+    return response()->json([
+        'tracking_number' => $trackingNumber,
+        'message' => 'Tracking created successfully'
+    ], 201);
+}
+
 
     public function show(string $trackingNumber)
     {
-        $now = Carbon::now('America/New_York');
+        $now = Carbon::now('America/New_York')->addDays(7);
         // $tracking = Tracking::with('events')->where('tracking_number', $trackingNumber)->firstOrFail();
         
         // Eager load only necessary columns from events, ordered by date
@@ -141,7 +139,18 @@ class TrackingController1 extends Controller
 
         $now = Carbon::now();
         $lastPast = $t->events()->where('event_date', '<=', $now)->latest('event_date')->first();
-        $location_city = $lastPast ? $lastPast->location_city : ($t->origin_city ?? config($t->country_type === 1 ? 'hubs_us' : 'hubs_ca')[$t->origin_state] ?? 'Origin');
+        $location_city = $lastPast
+        ? $lastPast->location_city
+        : (
+            $t->origin_city
+            ?? match ($t->country_type) {
+                1 => config('hubs_us')[$t->origin_state] ?? 'Origin',
+                2 => config('hubs_ca')[$t->origin_state] ?? 'Origin',
+                3 => config('hubs_mx')[$t->origin_state] ?? 'Origin',
+                default => 'Origin',
+            }
+        );
+
         $location_state = $lastPast ? $lastPast->location_state : $t->origin_state;
 
         \App\Models\TrackingEvent::create([
