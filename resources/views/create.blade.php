@@ -94,7 +94,7 @@
     </select>
 
     <label for="origin_state" class="required">Origin State/Province</label>
-    <input type="text" id="origin_state" name="origin_state" required placeholder="e.g., TX or ON" maxlength="3">
+    <input type="text" id="origin_state" name="origin_state" required placeholder="e.g., TX or ON" maxlength="5">
 
     <label for="origin_city">Origin City</label>
     <input type="text" id="origin_city" name="origin_city" placeholder="e.g., Dallas">
@@ -103,7 +103,7 @@
     <input type="text" id="origin_zip" name="origin_zip" placeholder="e.g., 75201">
 
     <label for="destination_state" class="required">Destination State/Province</label>
-    <input type="text" id="destination_state" name="destination_state" required placeholder="e.g., OH or QC" maxlength="3">
+    <input type="text" id="destination_state" name="destination_state" required placeholder="e.g., OH or QC" maxlength="5">
 
     <label for="destination_city">Destination City</label>
     <input type="text" id="destination_city" name="destination_city" placeholder="e.g., Columbus">
